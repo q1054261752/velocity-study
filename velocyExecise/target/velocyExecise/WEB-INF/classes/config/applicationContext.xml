@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+	xmlns:aop="http://www.springframework.org/schema/aop"
+
+	xmlns:tx="http://www.springframework.org/schema/tx"
+
+	xmlns:context="http://www.springframework.org/schema/context"
+
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+
+					    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+
+						 http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+
+					     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<context:property-placeholder location="classpath:config/jdbc.properties"/>
+
+	<!-- 配置注解自动扫描 -->
+	<context:component-scan base-package="velocity.test"/>
+	<bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">
+		<property name="driver">
+			<value>${database.driver}</value>
+		</property>
+		<property name="user" value="${database.user}" />
+		<property name="password" value="${database.password}" />
+		<property name="driverUrl" value="${database.url}?useUnicode=true&amp;characterEncoding=utf8&amp;jdbcCompliantTruncation=false&amp;zeroDateTimeBehavior=convertToNull&amp;user=${database.user}&amp;password=${database.password}" />
+		<!-- 默认保持的有效连接数 -->
+		<property name="prototypeCount" value="10" />
+		<property name="simultaneousBuildThrottle" value="100" />
+		<!-- 默认激活的连接数 -->
+		<property name="minimumConnectionCount" value="10" />
+		<property name="maximumConnectionCount" value="1536" />
+		<property name="houseKeepingSleepTime" value="90000" />
+		<!-- 设置连接超时时间 -->
+		<property name="maximumActiveTime" value="3600000"/>
+		<!-- 数据库测试语句 以下语句适用于SQL SERVER 如果MYSQL用: select CURRENT_DATE  -->
+		<property name="houseKeepingTestSql" value="select CURRENT_DATE" />
+	</bean>
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+</beans>
+
