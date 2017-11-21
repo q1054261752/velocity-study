@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+	<context:component-scan
+		base-package="com.spring.action" />
+	<!--  
+		org.springframework.web.servlet.view.ResourceBundleViewResolver
+		用于多个视图集成时,ResourceBundleViewResolver是通过解析资源文件来解析请求输出文件的。
+		<property name="basename" value="views"></property>,即表示在/WEB-INF/classes路径下有一个
+		views.properties文件,本例中views.properties的内容为
+		welcome.(class)=org.springframework.web.servlet.view.velocity.VelocityView
+		welcome.url=welcome.vm
+		freemarker.(class)=org.springframework.web.servlet.view.freemarker.FreeMarkerView
+		freemarker.url=freemarker.ftl
+	-->
+	<bean class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+		<property name="basename" value="views"></property>
+		<!-- 
+			<property name="order" value="0"></property>
+		-->
+	</bean>
+	
+	<!-- jsp视图解析器 -->
+	<bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>		
+	
+	<!-- velocity视图解析器 -->
+	<bean id="velocityViewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+		<property name="cache" value="true"/>
+		<property name="prefix" value="/"/>
+		<property name="suffix" value=".vm"/>
+	</bean>
+	
+	<!-- velocity环境配置 -->
+	<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<!-- velocity配置文件路径 -->
+		<property name="configLocation" value="/WEB-INF/velocity.properties"/>
+		<!-- velocity模板路径 -->
+		<property name="resourceLoaderPath" value="/WEB-INF/velocity/"/>
+	</bean>
+	
+	<!-- FreeMarker环境配置 -->
+	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<!-- freemarker模板位置 -->
+		<property name="templateLoaderPath" value="/WEB-INF/freemarker/"/>
+	</bean>
+	
+	<!-- FreeMarker视图解析 -->
+	<bean id="freeMarkerViewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="cache" value="true"/>
+		<property name="prefix" value="/"/>
+		<property name="suffix" value=".ftl"/>
+	</bean>
+</beans>
